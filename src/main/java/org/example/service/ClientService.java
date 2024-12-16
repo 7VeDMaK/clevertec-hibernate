@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.entity.Client;
+import org.example.exception.NotFoundClientException;
 import org.example.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class ClientService {
             client.setRegistrationDate(updatedClient.getRegistrationDate());
             return clientRepository.save(client);
         } else {
-            throw new RuntimeException("Client with id " + id + " not found.");
+            throw new NotFoundClientException(id);
         }
     }
 
@@ -38,7 +39,7 @@ public class ClientService {
         if (clientRepository.existsById(id)) {
             clientRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Client with id " + id + " not found.");
+            throw new NotFoundClientException(id);
         }
     }
 

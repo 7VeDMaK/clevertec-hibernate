@@ -1,6 +1,8 @@
 package org.example.service;
 
 import org.example.entity.Car;
+import org.example.entity.CarShowroom;
+import org.example.exception.NotFoundCarException;
 import org.example.repository.CarRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,23 @@ public class CarService {
         return carRepository.save(car);
     }
 
+    public Car addCarToShowroom(Car car, CarShowroom carShowroom) {
+        car.setCarShowroom(carShowroom);
+        return carRepository.save(car);
+    }
+
+    public Car assignCarToShowroom(Long carId, CarShowroom carShowroom) {
+        Optional<Car> existingCar = carRepository.findById(carId);
+
+        if (existingCar.isPresent()) {
+            Car car = existingCar.get();
+            car.setCarShowroom(carShowroom);
+            return carRepository.save(car);
+        } else {
+            throw new NotFoundCarException(carId);
+        }
+    }
+
     public Car updateCar(Long id, Car updatedCar) {
         Optional<Car> existingCar = carRepository.findById(id);
         if (existingCar.isPresent()) {
@@ -32,7 +51,7 @@ public class CarService {
             car.setCarShowroom(updatedCar.getCarShowroom());
             return carRepository.save(car);
         } else {
-            throw new RuntimeException("Car with id " + id + " not found.");
+            throw new NotFoundCarException(id);
         }
     }
 
@@ -40,7 +59,7 @@ public class CarService {
         if (carRepository.existsById(id)) {
             carRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Car with id " + id + " not found.");
+            throw new NotFoundCarException(id);
         }
     }
 

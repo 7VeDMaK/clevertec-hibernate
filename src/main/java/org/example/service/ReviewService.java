@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.entity.Review;
+import org.example.exception.NotFoundReviewException;
 import org.example.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class ReviewService {
             review.setCar(updatedReview.getCar());
             return reviewRepository.save(review);
         } else {
-            throw new RuntimeException("Review with id " + id + " not found.");
+            throw new NotFoundReviewException(id);
         }
     }
 
@@ -39,7 +40,7 @@ public class ReviewService {
         if (reviewRepository.existsById(id)) {
             reviewRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Review with id " + id + " not found.");
+            throw new NotFoundReviewException(id);
         }
     }
 

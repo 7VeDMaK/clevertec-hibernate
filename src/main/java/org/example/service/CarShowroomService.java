@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.entity.CarShowroom;
+import org.example.exception.NotFoundCarShowroomException;
 import org.example.repository.CarShowroomRepository;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class CarShowroomService {
             showroom.setAddress(updatedShowroom.getAddress());
             return carShowroomRepository.save(showroom);
         } else {
-            throw new RuntimeException("CarShowroom with id " + id + " not found.");
+            throw new NotFoundCarShowroomException(id);
         }
     }
 
@@ -37,7 +38,7 @@ public class CarShowroomService {
         if (carShowroomRepository.existsById(id)) {
             carShowroomRepository.deleteById(id);
         } else {
-            throw new RuntimeException("CarShowroom with id " + id + " not found.");
+            throw new NotFoundCarShowroomException(id);
         }
     }
 

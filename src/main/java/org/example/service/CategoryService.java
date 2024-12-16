@@ -2,6 +2,7 @@ package org.example.service;
 
 
 import org.example.entity.Category;
+import org.example.exception.NotFoundCategoryException;
 import org.example.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class CategoryService {
             category.setName(updatedCategory.getName());
             return categoryRepository.save(category);
         } else {
-            throw new RuntimeException("Category with id " + id + " not found.");
+            throw new NotFoundCategoryException(id);
         }
     }
 
@@ -37,7 +38,7 @@ public class CategoryService {
         if (categoryRepository.existsById(id)) {
             categoryRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Category with id " + id + " not found.");
+            throw new NotFoundCategoryException(id);
         }
     }
 
