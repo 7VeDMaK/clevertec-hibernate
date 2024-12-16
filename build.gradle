@@ -1,6 +1,7 @@
 plugins {
+    id 'org.springframework.boot' version '3.4.0'
+    id 'io.spring.dependency-management' version '1.1.6'
     id 'java'
-    id 'application'
     id 'idea'
 }
 
@@ -8,8 +9,15 @@ group = 'org.example'
 version = '1.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
@@ -17,21 +25,15 @@ repositories {
 }
 
 dependencies {
-    // Hibernate Core
-    implementation 'org.hibernate:hibernate-core:6.2.6.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    // PostgreSQL Driver
-    implementation 'org.postgresql:postgresql:42.7.2'
-
-    // Lombok
-    implementation 'org.projectlombok:lombok:1.18.30'
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
-
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
-test {
+tasks.named('test') {
     useJUnitPlatform()
 }
