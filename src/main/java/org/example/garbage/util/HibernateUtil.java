@@ -1,4 +1,4 @@
-package org.example.util;
+package org.example.garbage.util;
 
 import lombok.Getter;
 import lombok.experimental.UtilityClass;

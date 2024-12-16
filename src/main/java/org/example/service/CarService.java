@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.entity.Car;
 import org.example.entity.CarShowroom;
+import org.example.entity.Category;
 import org.example.exception.NotFoundCarException;
 import org.example.repository.CarRepository;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,18 @@ public class CarService {
     public CarService(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
+
+    public Car createCar(String model, String brand, int year, double price, Category category, CarShowroom carShowroom) {
+        Car car = new Car();
+        car.setModel(model);
+        car.setBrand(brand);
+        car.setYear(year);
+        car.setPrice(price);
+        car.setCategory(category);
+        car.setCarShowroom(carShowroom);
+        return carRepository.save(car);
+    }
+
 
     public Car addCar(Car car) {
         return carRepository.save(car);
