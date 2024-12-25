@@ -3,11 +3,11 @@ package org.example.service;
 import org.example.entity.Car;
 import org.example.entity.CarShowroom;
 import org.example.repository.CarRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -27,13 +26,10 @@ import static org.mockito.Mockito.when;
 class CarServiceTest {
 
     private CarRepository carRepository;
+
+    @InjectMocks
     private CarService carService;
 
-    @BeforeEach
-    void setUp() {
-        carRepository = mock(CarRepository.class);
-        carService = new CarService(carRepository);
-    }
 
     static Stream<Car> carProvider() {
         return Stream.of(

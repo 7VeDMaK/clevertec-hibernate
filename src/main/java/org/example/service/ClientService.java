@@ -1,7 +1,10 @@
 package org.example.service;
 
+import jakarta.transaction.Transactional;
+import org.example.entity.Car;
 import org.example.entity.Client;
 import org.example.exception.NotFoundClientException;
+import org.example.repository.CarRepository;
 import org.example.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,24 +17,30 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
 
-    public ClientService(ClientRepository clientRepository) {
+    private final CarRepository carRepository;
+
+    public ClientService(ClientRepository clientRepository, CarRepository carRepository) {
         this.clientRepository = clientRepository;
+        this.carRepository = carRepository;
     }
 
     public Client addClient(Client client) {
         return clientRepository.save(client);
     }
 
-//    public Car buyCar(Client client, Car car) {
-//        if (client.getCars().contains(car)) {
-//            throw new IllegalStateException("This car is already purchased by another client.");
-//        }
-//
-//        car.setClient(client);
-//        client.getCars().add(car);
-//
-//        return carRepository.save(car);
-//    }
+    @Transactional
+    public void buyCar(Client client, Car car) {
+        if (client == null || car == null) {
+            throw new IllegalArgumentException("Client and Car must not be null");
+        }
+
+        if (client.getCars().contains(car)) {
+            throw new IllegalStateException("Client already owns this car.");
+        }
+
+        client.getCars().add(car);
+        clientRepository.save(client);
+    } //Add more exception info
 
 
     public Client updateClient(Long id, Client updatedClient) {

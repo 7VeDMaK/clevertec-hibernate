@@ -5,6 +5,10 @@ import org.example.entity.CarShowroom;
 import org.example.entity.Category;
 import org.example.exception.NotFoundCarException;
 import org.example.repository.CarRepository;
+import org.example.specification.CarSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +62,17 @@ public class CarService {
                                        int year, double minPrice,
                                        double maxPrice){
         return carRepository.findCarsByFilters(brand, category, year, minPrice, maxPrice);
+    }
+
+    public Page<Car> searchCars(String brand, Integer year, String category,
+                                Double minPrice, Double maxPrice, Pageable pageable) {
+        Specification<Car> spec = Specification
+                .where(CarSpecification.hasBrand(brand))
+                .and(CarSpecification.hasYear(year))
+                .and(CarSpecification.hasCategory(category))
+                .and(CarSpecification.priceBetween(minPrice, maxPrice));
+
+        return carRepository.findAll(spec, pageable);
     }
 
     public Car updateCar(Long id, Car updatedCar) {

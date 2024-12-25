@@ -1,5 +1,7 @@
 package org.example.service;
 
+import org.example.entity.Car;
+import org.example.entity.Client;
 import org.example.entity.Review;
 import org.example.exception.NotFoundReviewException;
 import org.example.repository.ReviewRepository;
@@ -13,6 +15,40 @@ import java.util.Optional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+
+    public Review addReview(Client client, Car car, String text, int rating) {
+        if (client == null || car == null) {
+            throw new IllegalArgumentException("Client and Car must not be null");
+        }
+        if (text == null || text.isBlank()) {
+            throw new IllegalArgumentException("Review text must not be empty");
+        }
+        if (rating < 1 || rating > 5) {
+            throw new IllegalArgumentException("Rating must be between 1 and 5");
+        }
+
+        Review review = new Review();
+        review.setClient(client);
+        review.setCar(car);
+        review.setText(text);
+        review.setRating(rating);
+
+        return reviewRepository.save(review);
+    } //Add more exception info
+
+    public List<Review> searchReviews(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            throw new IllegalArgumentException("Keyword must not be empty");
+        }
+        return reviewRepository.findByTextContainingIgnoreCase(keyword);
+    }
+
+    public List<Review> searchReviewByKeyword(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            throw new IllegalArgumentException("Keyword must not be empty");
+        }
+        return reviewRepository.searchReviewsByKeyword(keyword);
+    }
 
     public ReviewService(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
