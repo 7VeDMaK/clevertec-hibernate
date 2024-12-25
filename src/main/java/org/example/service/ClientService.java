@@ -22,6 +22,18 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+//    public Car buyCar(Client client, Car car) {
+//        if (client.getCars().contains(car)) {
+//            throw new IllegalStateException("This car is already purchased by another client.");
+//        }
+//
+//        car.setClient(client);
+//        client.getCars().add(car);
+//
+//        return carRepository.save(car);
+//    }
+
+
     public Client updateClient(Long id, Client updatedClient) {
         Optional<Client> existingClient = clientRepository.findById(id);
         if (existingClient.isPresent()) {

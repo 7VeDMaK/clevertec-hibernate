@@ -19,7 +19,9 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
-    public Car createCar(String model, String brand, int year, double price, Category category, CarShowroom carShowroom) {
+    public Car createCar(String model, String brand, int year,
+                         double price, Category category,
+                         CarShowroom carShowroom) {
         Car car = new Car();
         car.setModel(model);
         car.setBrand(brand);
@@ -35,7 +37,7 @@ public class CarService {
         return carRepository.save(car);
     }
 
-    public Car addCarToShowroom(Car car, CarShowroom carShowroom) {
+    public Car assignCarToShowroom(Car car, CarShowroom carShowroom) {
         car.setCarShowroom(carShowroom);
         return carRepository.save(car);
     }
@@ -50,6 +52,12 @@ public class CarService {
         } else {
             throw new NotFoundCarException(carId);
         }
+    }
+
+    public List<Car> findCarsByFilters(String brand, String category,
+                                       int year, double minPrice,
+                                       double maxPrice){
+        return carRepository.findCarsByFilters(brand, category, year, minPrice, maxPrice);
     }
 
     public Car updateCar(Long id, Car updatedCar) {
